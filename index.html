@@ -146,6 +146,16 @@
                 const listItem = document.createElement('div');
                 listItem.appendChild(checkbox);
                 listItem.appendChild(label);
+
+                if (item.link) {
+                    const link = document.createElement('a');
+                    link.href = item.link;
+                    link.textContent = 'More Info';
+                    link.target = '_blank';  // Opens the link in a new tab
+                    link.style.marginLeft = '5px';  // Optional styling for spacing
+                    listItem.appendChild(link);
+                }
+                
                 itemList.appendChild(listItem);
             });
         }
