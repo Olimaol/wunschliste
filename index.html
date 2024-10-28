@@ -5,203 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wunschliste</title>
     <style>
-        /* Toggle Switch Styles */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-
-        /* Hide the default HTML checkbox */
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        /* The slider */
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
+        h1 {
+            text-align: center;
+            color: #333;
         }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
+        ul {
+            list-style-type: none;
+            padding: 0;
         }
-
-        /* When checked, change background color */
-        input:checked + .slider {
-            background-color: #4CAF50;
+        li {
+            margin: 10px 0;
         }
-
-        /* Move the slider (circle) when checked */
-        input:checked + .slider:before {
-            transform: translateX(26px);
+        a {
+            text-decoration: none;
+            color: #007BFF;
         }
-
-        /* Optional - making the switch more rounded */
-        .slider.round {
-            border-radius: 34px;
-        }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
-        /* Increase the text size for all paragraphs */
-        p {
-            font-size: 20px; /* Adjust as needed */
-        }
-
-        /* Increase checkbox size */
-        input[type="checkbox"] {
-            transform: scale(2.5); /* Adjust the scale as needed */
-            -webkit-transform: scale(2.5); /* For Safari */
-            margin-bottom: 15px; 
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        /* Increase text size for all labels */
-        label {
-            font-size: 20px; /* Adjust as needed */
-        }
-
-        /* Increase text size for unordered list items */
-        ul li {
-            font-size: 20px; /* Adjust as needed */
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h2>Wunschliste</h2>
-    <p>
-        Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
-    </p>
-    <div id="item-list"></div>
-    <p>
-        Falsches Häckchen gesetzt? Hier kann man gesetzte Häckchen entsperren:
-        <!-- Switch (styled as a toggle button) -->
-        <label class="switch">
-            <input type="checkbox" id="unlock-switch">
-            <span class="slider round"></span>
-        </label>
-    </p>
-
-    <h3>Sonstiges</h3>
-
-    <ul>
-        <li>Knisterbücher</li>
-        <li>Greif-/Gitterball</li>
-        <li>Beißringe</li>
-        <li>Keine Kuscheltiere</li>
-    </ul>
-
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getDatabase, ref, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // function ref(e,t)
-        // function onValue(e,t,n,r)
-        // function update(e,t)
-        // function get(e)
-      
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyAHvOkzfxc5T2UZV5STYOTMn3qCax_u8AE",
-          authDomain: "wunschliste24-ad8d0.firebaseapp.com",
-          databaseURL: "https://wunschliste24-ad8d0-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "wunschliste24-ad8d0",
-          storageBucket: "wunschliste24-ad8d0.appspot.com",
-          messagingSenderId: "861281441167",
-          appId: "1:861281441167:web:addf34bffab799a07327fa"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        const itemList = document.getElementById('item-list');
-        const unlockSwitch = document.getElementById('unlock-switch');
-        let locked = true;  // Initially all checked items are locked
-
-        // Function to render checkboxes
-        function renderItems(items) {
-            itemList.innerHTML = '';  // Clear the list before rendering
-
-            Object.keys(items).forEach(key => {
-                const item = items[key];
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = key;
-                checkbox.checked = item.checked;
-                checkbox.disabled = item.checked && locked;  // Lock checked items
-
-                checkbox.addEventListener('change', () => {
-                    // Update the database when the checkbox is changed
-                    update(ref(db, 'items/' + key), {
-                        checked: checkbox.checked
-                    });
-                });
-
-                const label = document.createElement('label');
-                //label.htmlFor = key;
-                label.textContent = item.name;
-                label.style.marginLeft = '5px';
-                //label.style.marginBottom = '30px';
-
-                const listItem = document.createElement('div');
-                listItem.appendChild(checkbox);
-                listItem.appendChild(label);
-
-                if (item.link) {
-                    const link = document.createElement('a');
-                    link.href = item.link;
-                    link.textContent = 'Shop Link';
-                    link.target = '_blank';  // Opens the link in a new tab
-                    link.style.marginLeft = '5px';  // Optional styling for spacing
-                    listItem.appendChild(link);
-                }
-                
-                itemList.appendChild(listItem);
-            });
-        }
-
-        // Fetch data from Firebase Realtime Database
-        const itemsRef = ref(db, 'items');
-        onValue(itemsRef, (snapshot) => {
-            const items = snapshot.val();
-            if (items) {
-                renderItems(items);
-            }
-        });
-
-        // Toggle lock/unlock using the switch
-        unlockSwitch.addEventListener('change', () => {
-            locked = !unlockSwitch.checked;
-            get(itemsRef).then((snapshot) => {
-                renderItems(snapshot.val());
-            });
-        });
-    </script>
+    <div class="container">
+        <h1>Wunschlisten</h1>
+        <ul>
+            <li><a href="baby.html">Baby Geburt und Weihnachten</a></li>
+            <li><a href="emil.html">Emil Geburtstag, Nikolaus und Weihnachten</a></li>
+        </ul>
+    </div>
 </body>
 </html>
