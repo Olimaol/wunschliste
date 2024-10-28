@@ -94,9 +94,6 @@
     <p>
         Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
     </p>
-    <p>
-        (* = es wird sich Geld für den bereits gekauften Gegenstand gewünscht)
-    </p>
     <div id="item-list"></div>
     <p>
         Falsches Häckchen gesetzt? Hier kann man gesetzte Häckchen kurzzeitig entsperren:
@@ -164,7 +161,7 @@
 
                     checkbox.addEventListener('change', () => {
                         // Update the database when the checkbox is changed
-                        update(ref(db, 'items/' + key), {
+                        update(ref(db, 'emil_geschenke/' + key), {
                             checked: checkbox.checked
                         });
                     });

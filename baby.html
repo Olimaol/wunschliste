@@ -164,7 +164,7 @@
 
                     checkbox.addEventListener('change', () => {
                         // Update the database when the checkbox is changed
-                        update(ref(db, 'items/' + key), {
+                        update(ref(db, 'baby_geschenke/' + key), {
                             checked: checkbox.checked
                         });
                     });
