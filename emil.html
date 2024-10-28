@@ -68,24 +68,55 @@
         p {
             font-size: 20px; /* Adjust as needed */
         }
-
-        /* Increase checkbox size */
-        input[type="checkbox"] {
-            transform: scale(2.5); /* Adjust the scale as needed */
-            -webkit-transform: scale(2.5); /* For Safari */
-            margin-bottom: 15px; 
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        /* Increase text size for all labels */
-        label {
-            font-size: 20px; /* Adjust as needed */
-        }
-
+        
         /* Increase text size for unordered list items */
         ul li {
             font-size: 20px; /* Adjust as needed */
+        }
+
+        .item-container {
+            display: flex;
+            flex-direction: row; /* Arrange elements vertically */
+            align-items: center;    /* Center align items */
+            padding: 10px 0;        /* Add some vertical spacing between items */
+            gap: 10px;              /* Space between each element */
+            margin-left: 10px;       /* Add some left margin */
+        }
+
+        /* Increase checkbox size */
+        .item-container input[type="checkbox"] {
+            transform: scale(2.5); /* Adjust the scale as needed */
+            -webkit-transform: scale(2.5); /* For Safari */
+        }
+
+        .item-container label {
+            font-size: 20px;
+        }
+
+        .item-container button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* Remove borders */
+            font-size: 16px; /* Increase font size */
+            cursor: pointer; /* Add a pointer cursor on hover */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover transition */
+            /* align the b */
+        }
+
+        /* Hover, active, and focus states remain the same */
+        .item-container button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .item-container button:active {
+            background-color: #3e8e41;
+            transform: translateY(1px);
+        }
+
+        .item-container button:focus {
+            outline: 2px solid #8ef1b7;
         }
     </style>
 </head>
@@ -168,19 +199,19 @@
 
                     const label = document.createElement('label');
                     label.textContent = item.name;
-                    label.style.marginLeft = '5px';
 
                     const listItem = document.createElement('div');
+                    listItem.className = 'item-container';  // Assign CSS class for styling
                     listItem.appendChild(checkbox);
                     listItem.appendChild(label);
 
                     if (item.link) {
-                        const link = document.createElement('a');
-                        link.href = item.link;
-                        link.textContent = 'Hier bestellen';
-                        link.target = '_blank';  // Opens the link in a new tab
-                        link.style.marginLeft = '5px';  // Optional styling for spacing
-                        listItem.appendChild(link);
+                        const button = document.createElement('button');
+                        button.textContent = 'Hier bestellen';
+                        button.addEventListener('click', () => {
+                            window.open(item.link, '_blank');  // Opens the link in a new tab
+                        });
+                        listItem.appendChild(button);
                     }
                     
                     itemList.appendChild(listItem);
