@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby</title>
+    <title>Fabi</title>
     <style>
         /* Toggle Switch Styles */
         .switch {
@@ -126,7 +126,7 @@
     </style>
 </head>
 <body>
-    <h3><a href="index.html">Wunschlisten</a> > Baby</h3>
+    <h3><a href="index.html">Wunschlisten</a> > Fabi</h3>
     <p>
         Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
     </p>
@@ -154,8 +154,8 @@
 
     <script type="module">
         // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getDatabase, ref, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue, update, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -170,7 +170,7 @@
           authDomain: "wunschliste24-ad8d0.firebaseapp.com",
           databaseURL: "https://wunschliste24-ad8d0-default-rtdb.europe-west1.firebasedatabase.app",
           projectId: "wunschliste24-ad8d0",
-          storageBucket: "wunschliste24-ad8d0.appspot.com",
+          storageBucket: "wunschliste24-ad8d0.firebasestorage.app",
           messagingSenderId: "861281441167",
           appId: "1:861281441167:web:addf34bffab799a07327fa"
         };
@@ -200,7 +200,7 @@
 
                     checkbox.addEventListener('change', () => {
                         // Update the database when the checkbox is changed
-                        update(ref(db, 'baby_geschenke/' + key), {
+                        update(ref(db, 'fabi_geschenke/' + key), {
                             checked: checkbox.checked
                         });
                     });
@@ -228,7 +228,7 @@
         }
 
         // Fetch data from Firebase Realtime Database
-        const itemsRef = ref(db, 'baby_geschenke');
+        const itemsRef = ref(db, 'fabi_geschenke');
         onValue(itemsRef, (snapshot) => {
             const items = snapshot.val();
             if (items) {

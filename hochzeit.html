@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emil</title>
+    <title>Hochzeit</title>
     <style>
         /* Toggle Switch Styles */
         .switch {
@@ -121,7 +121,7 @@
     </style>
 </head>
 <body>
-    <h3><a href="index.html">Wunschlisten</a> > Emil</h3>
+    <h3><a href="index.html">Wunschlisten</a> >Hochzeit</h3>
     <p>
         Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
     </p>
@@ -135,13 +135,11 @@
         </label>
     </p>
 
-    <h3>Bitte auch Gutscheine für Gartenspielzeuge (z.B. Fußballtore, Matschküche, Wasserspiel) und Kleidung im kommenden Jahr</h3>
+    <h3>Hier Platz für sonstige Wünsche</h3>
 
     <ul>
-        <li>Hellweg Gutschein</li>
-        <li>Müller Gutschein</li>
-        <li>Ernstings Gutschein</li>
-        <li>Amazon Gutschein</li>
+        <li>Mal</li>
+        <li>schauen</li>
     </ul>
 
     <script type="module">
@@ -192,7 +190,7 @@
 
                     checkbox.addEventListener('change', () => {
                         // Update the database when the checkbox is changed
-                        update(ref(db, 'emil_geschenke/' + key), {
+                        update(ref(db, 'hochzeit_geschenke/' + key), {
                             checked: checkbox.checked
                         });
                     });
@@ -219,7 +217,7 @@
         }
 
         // Fetch data from Firebase Realtime Database
-        const itemsRef = ref(db, 'emil_geschenke');
+        const itemsRef = ref(db, 'hochzeit_geschenke');
         onValue(itemsRef, (snapshot) => {
             const items = snapshot.val();
             if (items) {
