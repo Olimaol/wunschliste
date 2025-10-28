@@ -210,7 +210,7 @@
         }
 
         // Fetch data from Firebase Realtime Database
-        const itemsRef = ref(db, 'bride_geschenke');
+        const itemsRef = ref(db, 'beide_geschenke');
         onValue(itemsRef, (snapshot) => {
             const items = snapshot.val();
             if (items) {
