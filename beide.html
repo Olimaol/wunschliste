@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hochzeit</title>
+    <title>Beide</title>
     <style>
         /* Toggle Switch Styles */
         .switch {
@@ -135,13 +135,6 @@
         </label>
     </p>
 
-    <h3>Hier Platz für sonstige Wünsche</h3>
-
-    <ul>
-        <li>Mal</li>
-        <li>schauen</li>
-    </ul>
-
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -190,7 +183,7 @@
 
                     checkbox.addEventListener('change', () => {
                         // Update the database when the checkbox is changed
-                        update(ref(db, 'hochzeit_geschenke/' + key), {
+                        update(ref(db, 'beide_geschenke/' + key), {
                             checked: checkbox.checked
                         });
                     });
@@ -217,7 +210,7 @@
         }
 
         // Fetch data from Firebase Realtime Database
-        const itemsRef = ref(db, 'hochzeit_geschenke');
+        const itemsRef = ref(db, 'bride_geschenke');
         onValue(itemsRef, (snapshot) => {
             const items = snapshot.val();
             if (items) {
