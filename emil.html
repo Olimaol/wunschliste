@@ -1,131 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
     <title>Emil</title>
-    <style>
-        /* Toggle Switch Styles */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-
-        /* Hide the default HTML checkbox */
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        /* The slider */
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        /* When checked, change background color */
-        input:checked + .slider {
-            background-color: #4CAF50;
-        }
-
-        /* Move the slider (circle) when checked */
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        /* Optional - making the switch more rounded */
-        .slider.round {
-            border-radius: 34px;
-        }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
-        /* Increase the text size for all paragraphs */
-        p {
-            font-size: 20px; /* Adjust as needed */
-        }
-        
-        /* Increase text size for unordered list items */
-        ul li {
-            font-size: 20px; /* Adjust as needed */
-        }
-
-        .item-container {
-            display: flex;
-            flex-direction: row; /* Arrange elements vertically */
-            align-items: center;    /* Center align items */
-            padding: 10px 0;        /* Add some vertical spacing between items */
-            gap: 10px;              /* Space between each element */
-            margin-left: 10px;       /* Add some left margin */
-        }
-
-        /* Increase checkbox size */
-        .item-container input[type="checkbox"] {
-            transform: scale(2.5); /* Adjust the scale as needed */
-            -webkit-transform: scale(2.5); /* For Safari */
-        }
-
-        .item-container label {
-            font-size: 20px;
-        }
-
-        .item-container button {
-            background-color: #4CAF50; /* Green background */
-            color: white; /* White text */
-            border: none; /* Remove borders */
-            font-size: 16px; /* Increase font size */
-            cursor: pointer; /* Add a pointer cursor on hover */
-            border-radius: 5px; /* Rounded corners */
-            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover transition */
-            /* align the b */
-        }
-
-        /* Hover, active, and focus states remain the same */
-        .item-container button:hover {
-            background-color: #45a049;
-            transform: translateY(-2px);
-        }
-
-        .item-container button:active {
-            background-color: #3e8e41;
-            transform: translateY(1px);
-        }
-
-        .item-container button:focus {
-            outline: 2px solid #8ef1b7;
-        }
-    </style>
+    <link rel="stylesheet" href="wunschliste.css">
 </head>
 <body>
     <h3><a href="index.html">Wunschlisten</a> > Emil</h3>
     <p>
         Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
     </p>
-    <div id="item-list"></div>
+    <!-- data-list: name of this list in the Firebase database -->
+    <div id="item-list" data-list="emil_geschenke">
+        <p class="message">Wunschliste wird geladen …</p>
+    </div>
     <p>
         Falsches Häkchen gesetzt? Hier kann man gesetzte Häkchen kurzzeitig entsperren:
         <!-- Switch (styled as a toggle button) -->
@@ -137,96 +27,6 @@
 
     <h3>Was auch geht, ist Geld / Gutscheine für Gartenspielzeuge, Kleidung, etc. im kommenden Jahr</h3>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // function ref(e,t)
-        // function onValue(e,t,n,r)
-        // function update(e,t)
-        // function get(e)
-      
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyAHvOkzfxc5T2UZV5STYOTMn3qCax_u8AE",
-          authDomain: "wunschliste24-ad8d0.firebaseapp.com",
-          databaseURL: "https://wunschliste24-ad8d0-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "wunschliste24-ad8d0",
-          storageBucket: "wunschliste24-ad8d0.firebasestorage.app",
-          messagingSenderId: "861281441167",
-          appId: "1:861281441167:web:addf34bffab799a07327fa"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        const itemList = document.getElementById('item-list');
-        const unlockSwitch = document.getElementById('unlock-switch');
-        let locked = true;  // Initially all checked items are locked
-
-        // Function to render checkboxes
-        function renderItems(items) {
-            itemList.innerHTML = '';  // Clear the list before rendering
-
-            // Get the keys and sort them based on the item name alphabetically
-            Object.keys(items)
-                .sort((a, b) => items[a].name.localeCompare(items[b].name))
-                .forEach(key => {
-                    const item = items[key];
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.id = key;
-                    checkbox.checked = item.checked;
-                    checkbox.disabled = item.checked && locked;  // Lock checked items
-
-                    checkbox.addEventListener('change', () => {
-                        // Update the database when the checkbox is changed
-                        update(ref(db, 'emil_geschenke/' + key), {
-                            checked: checkbox.checked
-                        });
-                    });
-
-                    const label = document.createElement('label');
-                    label.textContent = item.name;
-
-                    const listItem = document.createElement('div');
-                    listItem.className = 'item-container';  // Assign CSS class for styling
-                    listItem.appendChild(checkbox);
-                    listItem.appendChild(label);
-
-                    if (item.link) {
-                        const button = document.createElement('button');
-                        button.textContent = 'Hier bestellen';
-                        button.addEventListener('click', () => {
-                            window.open(item.link, '_blank');  // Opens the link in a new tab
-                        });
-                        listItem.appendChild(button);
-                    }
-                    
-                    itemList.appendChild(listItem);
-                });
-        }
-
-        // Fetch data from Firebase Realtime Database
-        const itemsRef = ref(db, 'emil_geschenke');
-        onValue(itemsRef, (snapshot) => {
-            const items = snapshot.val();
-            if (items) {
-                renderItems(items);
-            }
-        });
-
-        // Toggle lock/unlock using the switch
-        unlockSwitch.addEventListener('change', () => {
-            locked = !unlockSwitch.checked;
-            get(itemsRef).then((snapshot) => {
-                renderItems(snapshot.val());
-            });
-        });
-    </script>
+    <script type="module" src="wunschliste.js"></script>
 </body>
 </html>
