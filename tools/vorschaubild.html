@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>Vorschaubild</title>
+    <!-- Template for the link preview pictures in img/ (shown by WhatsApp etc.).
+         Open it at a window size of 1200 x 630 and take a screenshot: without
+         parameters for the start page, with ?name=Emil for one list (add
+         &zusatz=zusammen for a second line). Save as JPEG under 300 KB. -->
+    <link rel="stylesheet" href="../wunschliste.css">
+    <style>
+        html, body {
+            width: 1200px;
+            height: 630px;
+            overflow: hidden;
+        }
+
+        body {
+            min-height: 0;
+        }
+
+        .page-head {
+            max-width: none;
+            padding: 2rem 0 0;
+        }
+
+        /* Title and tags stay inside the middle 630 x 630 square, which apps
+           use when they show only a small square thumbnail */
+        .title {
+            font-size: 5.25rem;
+            line-height: 1.55;
+        }
+
+        .tags {
+            margin-top: 1.75rem;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .tags::after {
+            --branch: 9.5rem;
+        }
+
+        .tag {
+            --hole: 1.75rem;
+            flex: 0 0 11rem;
+            min-height: 17rem;
+            font-size: 2.9rem;
+        }
+
+        .tag-for {
+            font-size: 0.55em;
+        }
+
+        .single .tag {
+            flex-basis: 16.5rem;
+            min-height: 21rem;
+            font-size: 4.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="page-head">
+        <p class="title">Wunschlisten</p>
+    </header>
+    <div class="tags">
+        <div class="tag"><span class="tag-for">Für</span> Fabi</div>
+        <div class="tag"><span class="tag-for">Für</span> Emil</div>
+        <div class="tag"><span class="tag-for">Für</span> beide <span class="tag-for">zusammen</span></div>
+    </div>
+
+    <script>
+        // ?name=Emil: one big tag for that list instead of all three
+        const params = new URLSearchParams(location.search);
+        const name = params.get("name");
+        if (name) {
+            document.querySelector(".title").textContent = "Wunschliste";
+
+            const forText = document.createElement("span");
+            forText.className = "tag-for";
+            forText.textContent = "Für";
+            const tag = document.createElement("div");
+            tag.className = "tag";
+            tag.append(forText, " " + name);
+            if (params.get("zusatz")) {
+                const extra = document.createElement("span");
+                extra.className = "tag-for";
+                extra.textContent = params.get("zusatz");
+                tag.append(" ", extra);
+            }
+
+            const tags = document.querySelector(".tags");
+            tags.classList.add("single");
+            tags.replaceChildren(tag);
+        }
+    </script>
+</body>
+</html>

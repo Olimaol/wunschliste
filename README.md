@@ -16,7 +16,8 @@ erscheinen sofort bei allen, die die Seite gerade offen haben.
 | `wunschliste.js` | gemeinsamer Code: lädt die Liste live und speichert Häkchen |
 | `wunschliste.css` | gemeinsames Aussehen (weihnachtlich: Anhänger an Bäckergarn auf grünem Geschenkpapier) |
 | `fonts/` | Schriften Playwrite DE LA (Handschrift) und Fraunces, mit Lizenz (SIL Open Font License); liegen auf der Seite selbst statt bei Google |
-| `img/` | Strohsterne im Hintergrund, Tannenzweige, Symbol im Browser-Tab |
+| `img/` | Strohsterne im Hintergrund, Tannenzweige, Symbol im Browser-Tab, Vorschaubilder für geteilte Links (`vorschau*.jpg`) |
+| `tools/vorschaubild.html` | Vorlage für die Vorschaubilder; wie man sie erzeugt, steht oben in der Datei |
 | `database.rules.json` | Zugriffsregeln der Datenbank |
 | `firebase.json`, `.firebaserc` | Einstellungen für das Firebase-Kommandozeilenwerkzeug |
 | `tests/rules.test.mjs` | prüft die Zugriffsregeln an einer lokalen Test-Datenbank |
@@ -81,3 +82,13 @@ python3 -m http.server 8000
    `data-list="neu_geschenke"` anpassen. Der Name muss auf `_geschenke` enden.
 2. In `index.html` einen Anhänger ergänzen (eine Zeile `<a class="tag" ...>` kopieren).
 3. In der Datenbank den Knoten `neu_geschenke` mit Geschenken anlegen.
+4. Vorschaubild für geteilte Links: `tools/vorschaubild.html?name=Neu` als
+   `img/vorschau-neu.jpg` speichern und in der neuen Seite die Zeilen
+   `og:title`, `og:url`, `og:image` und `og:image:alt` anpassen.
+
+## Link-Vorschau (WhatsApp usw.)
+
+Jede Seite hat im Kopf `og:`-Zeilen mit Titel, Beschreibung und Vorschaubild.
+Die Adressen darin müssen vollständig sein (`https://olimaol.github.io/...`);
+zieht die Seite um, müssen sie mit. WhatsApp merkt sich Vorschauen eine Weile.
+Zeigt ein Link noch die alte Vorschau, hilft beim Teilen ein angehängtes `?1`.
