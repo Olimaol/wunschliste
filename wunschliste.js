@@ -38,6 +38,12 @@ function webLink(url) {
     }
 }
 
+// Shop links of a gift: "links" holds one or more, "link" is the older single field
+function giftLinks(item) {
+    const links = item.links && typeof item.links === "object" ? Object.values(item.links) : [item.links];
+    return [item.link, ...links].map(webLink).filter(Boolean);
+}
+
 function renderItems() {
     const locked = !unlockSwitch.checked;  // Checked items stay locked unless unlocked
     const entries = Object.entries(items ?? {})
@@ -65,20 +71,25 @@ function renderItems() {
         label.htmlFor = checkbox.id;
         label.textContent = item.name;
 
-        const row = document.createElement("div");
-        row.className = "item-container";
-        row.append(checkbox, label);
+        // Name and shop buttons wrap together next to the checkbox
+        const text = document.createElement("div");
+        text.className = "item-text";
+        text.append(label);
 
-        const link = webLink(item.link);
-        if (link) {
+        const links = giftLinks(item);
+        links.forEach((link, index) => {
             const orderButton = document.createElement("a");
             orderButton.className = "order-button";
             orderButton.href = link;
             orderButton.target = "_blank";
             orderButton.rel = "noopener noreferrer";  // The shop page gets no handle on this tab
-            orderButton.textContent = "Hier bestellen";
-            row.append(orderButton);
-        }
+            orderButton.textContent = links.length === 1 ? "Hier bestellen" : `Vorschlag ${index + 1}`;
+            text.append(orderButton);
+        });
+
+        const row = document.createElement("div");
+        row.className = "item-container";
+        row.append(checkbox, text);
         return row;
     }));
 }

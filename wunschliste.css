@@ -90,16 +90,23 @@ ul li {
     -webkit-transform: scale(2.5); /* For Safari */
 }
 
-.item-container label {
-    font-size: 20px;
+/* Gift name plus its shop buttons; wraps onto more lines when needed */
+.item-text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
     margin-left: 5px;
 }
 
-/* "Hier bestellen" link, styled as a button */
+.item-container label {
+    font-size: 20px;
+}
+
+/* "Hier bestellen" / "Vorschlag n" links, styled as buttons */
 .item-container .order-button {
     display: inline-block;
-    flex-shrink: 0;            /* Long gift names wrap, the button does not */
-    white-space: nowrap;
+    white-space: nowrap;       /* A button never breaks in the middle */
     padding: 1px 6px;
     background-color: #4CAF50; /* Green background */
     color: white;

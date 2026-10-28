@@ -27,9 +27,13 @@ Jede Liste ist ein Knoten `<name>_geschenke` mit einem Eintrag pro Geschenk:
 emil_geschenke
   <beliebiger Schlüssel>
     name:    "Laufrad"        Text, Pflicht
-    link:    "https://..."    optional, ergibt den Knopf „Hier bestellen“
-    checked: false            true = jemand schenkt es
+    links:   ["https://...", ...]   optional; ein Link ergibt „Hier bestellen“,
+                                    mehrere ergeben „Vorschlag 1“, „Vorschlag 2“, …
+    checked: false                  true = jemand schenkt es
 ```
+
+Statt `links` geht auch ein einzelnes Textfeld `link` (bequemer beim Eintragen
+von Hand in der Konsole).
 
 Geschenke anlegen, umbenennen oder löschen geht nur in der Firebase-Konsole
 (Realtime Database → Daten) oder mit dem Firebase-Kommandozeilenwerkzeug,

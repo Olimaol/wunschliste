@@ -1,2 +1,5 @@
 # Firebase emulator logs
 *-debug.log
+
+# Local database backups (not for the public repo)
+backups/
