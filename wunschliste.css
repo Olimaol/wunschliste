@@ -1,5 +1,11 @@
 /* Shared styles for all wish list pages */
 
+/* Explicit colours, so apps that show pages over a dark background stay readable */
+body {
+    background-color: white;
+    color: black;
+}
+
 /* Toggle Switch Styles */
 .switch {
     position: relative;
@@ -88,6 +94,43 @@ ul li {
 .item-container input[type="checkbox"] {
     transform: scale(2.5);
     -webkit-transform: scale(2.5); /* For Safari */
+}
+
+/* Several suggestions for one wish: one line that opens on tap */
+.item-group {
+    margin-left: 10px;
+    padding: 10px 0;
+}
+
+.item-group summary {
+    font-size: 20px;
+    cursor: pointer;
+    list-style: none;          /* Own triangle below instead of the small default one */
+}
+
+.item-group summary::-webkit-details-marker {
+    display: none;             /* For Safari */
+}
+
+/* Green triangle in the checkbox column; points down while the group is open */
+.item-group summary::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    border-style: solid;
+    border-width: 8px 0 8px 13px;
+    border-color: transparent transparent transparent #4CAF50;
+    margin: 0 18px 0 4px;
+    transition: transform 0.2s ease;
+}
+
+.item-group[open] summary::before {
+    transform: rotate(90deg);
+}
+
+/* Suggestions inside an opened group sit indented under it */
+.item-group .item-container {
+    margin-left: 30px;
 }
 
 /* Gift name plus its shop buttons; wraps onto more lines when needed */

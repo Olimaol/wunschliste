@@ -35,6 +35,11 @@ emil_geschenke
 Statt `links` geht auch ein einzelnes Textfeld `link` (bequemer beim Eintragen
 von Hand in der Konsole).
 
+Mehrere Vorschläge zu einem Wunsch (z. B. verschiedene Brio-Wagen) sind
+einzelne Geschenke mit eigenem Häkchen und demselben Feld `group: "Brio"`.
+Die Seite zeigt sie als eine aufklappbare Zeile „Brio (15 Vorschläge,
+2 vergeben)“.
+
 Geschenke anlegen, umbenennen oder löschen geht nur in der Firebase-Konsole
 (Realtime Database → Daten) oder mit dem Firebase-Kommandozeilenwerkzeug,
 nicht über die Webseite.
