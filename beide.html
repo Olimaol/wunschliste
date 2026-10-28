@@ -4,26 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Beide</title>
+    <meta name="theme-color" content="#234536">
+    <title>Wunschliste für beide zusammen</title>
+    <link rel="icon" href="img/stern.svg" type="image/svg+xml">
     <link rel="stylesheet" href="wunschliste.css">
 </head>
 <body>
-    <h3><a href="index.html">Wunschlisten</a> > Beide</h3>
-    <p>
-        Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
-    </p>
-    <!-- data-list: name of this list in the Firebase database -->
-    <div id="item-list" data-list="beide_geschenke">
-        <p class="message">Wunschliste wird geladen …</p>
+    <header class="page-head list-head">
+        <a class="back" href="index.html">Alle Wunschlisten</a>
+    </header>
+
+    <!-- Gift tag with the name, hanging from the twine -->
+    <div class="tags">
+        <h1 class="tag"><span class="tag-for">Für</span> beide <span class="tag-for">zusammen</span></h1>
     </div>
-    <p>
-        Falsches Häkchen gesetzt? Hier kann man gesetzte Häkchen kurzzeitig entsperren:
-        <!-- Switch (styled as a toggle button) -->
-        <label class="switch">
-            <input type="checkbox" id="unlock-switch">
-            <span class="slider round"></span>
-        </label>
-    </p>
+
+    <main class="sheet">
+        <p>
+            Ihr möchtet davon etwas übernehmen/schenken? Dann bitte abhaken:
+        </p>
+        <!-- data-list: name of this list in the Firebase database -->
+        <div id="item-list" data-list="beide_geschenke">
+            <p class="message">Wunschliste wird geladen …</p>
+        </div>
+        <div class="unlock">
+            <label for="unlock-switch">Falsches Häkchen gesetzt? Hier kann man gesetzte Häkchen kurzzeitig entsperren:</label>
+            <!-- Switch (styled as a toggle button) -->
+            <label class="switch">
+                <input type="checkbox" id="unlock-switch">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </main>
 
     <script type="module" src="wunschliste.js"></script>
 </body>

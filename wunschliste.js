@@ -67,15 +67,20 @@ function renderItem(key, item, locked) {
     text.append(label);
 
     const links = giftLinks(item);
-    links.forEach((link, index) => {
-        const orderButton = document.createElement("a");
-        orderButton.className = "order-button";
-        orderButton.href = link;
-        orderButton.target = "_blank";
-        orderButton.rel = "noopener noreferrer";  // The shop page gets no handle on this tab
-        orderButton.textContent = links.length === 1 ? "Hier bestellen" : `Vorschlag ${index + 1}`;
-        text.append(orderButton);
-    });
+    if (links.length > 0) {
+        const orderLinks = document.createElement("span");
+        orderLinks.className = "order-links";
+        links.forEach((link, index) => {
+            const orderButton = document.createElement("a");
+            orderButton.className = "order-button";
+            orderButton.href = link;
+            orderButton.target = "_blank";
+            orderButton.rel = "noopener noreferrer";  // The shop page gets no handle on this tab
+            orderButton.textContent = links.length === 1 ? "Hier bestellen" : `Vorschlag ${index + 1}`;
+            orderLinks.append(orderButton);
+        });
+        text.append(orderLinks);
+    }
 
     const row = document.createElement("div");
     row.className = "item-container";
@@ -98,8 +103,14 @@ function renderGroup(name, members, locked) {
     const taken = members.filter(([, item]) => item.checked === true).length;
     const count = `${members.length} ${members.length === 1 ? "Vorschlag" : "Vorschläge"}`;
     const status = taken === 0 ? "" : taken === members.length ? ", alle vergeben" : `, ${taken} vergeben`;
+    const groupName = document.createElement("span");
+    groupName.className = "group-name";
+    groupName.textContent = name;
+    const groupCount = document.createElement("span");
+    groupCount.className = "group-count";
+    groupCount.textContent = count + status;
     const summary = document.createElement("summary");
-    summary.textContent = `${name} (${count}${status})`;
+    summary.append(groupName, " ", groupCount);
 
     group.append(summary, ...members.map(([key, item]) => renderItem(key, item, locked)));
     return group;

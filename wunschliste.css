@@ -1,174 +1,522 @@
-/* Shared styles for all wish list pages */
+/* Shared styles for all pages: a cozy Christmas look. Gift tags hang from a
+   red and white baker's twine on fir-green wrapping paper; each list sits on
+   a sheet of paper. */
 
-/* Explicit colours, so apps that show pages over a dark background stay readable */
-body {
-    background-color: white;
-    color: black;
+/* Fonts are served from this site (fonts/, licences next to them), so visitors'
+   browsers make no extra requests to Google */
+@font-face {
+    font-family: "Playwrite DE LA";  /* German school handwriting, for names */
+    src: url("fonts/playwrite-de-la.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
 }
 
-/* Toggle Switch Styles */
+@font-face {
+    font-family: "Fraunces";         /* Soft serif for all other text */
+    src: url("fonts/fraunces.woff2") format("woff2");
+    font-weight: 400 700;
+    font-display: swap;
+}
+
+/* Explicit colours everywhere, so apps that show pages over a dark background
+   stay readable */
+:root {
+    color-scheme: light;
+    --fir: #234536;           /* Wrapping paper */
+    --kraft: #d8b98f;         /* Gift tags */
+    --kraft-ring: #c4a374;    /* Ring around the punched hole */
+    --paper: #fffdf8;         /* List sheet */
+    --ink: #2e2419;           /* Text on paper */
+    --ink-soft: #6f6353;      /* Secondary text on paper */
+    --rule: #ebe3d5;          /* Lines between gifts */
+    --snow: #f8f1e3;          /* Text on the green */
+    --cranberry: #a62b2b;     /* Twine, unlocked switch, focus ring on paper */
+    --straw: #e4be6a;         /* Focus ring on the green */
+    --handwriting: "Playwrite DE LA", "Segoe Script", cursive;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--serif);
+    font-size: clamp(1.1875rem, 1.1rem + 0.3vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--snow);
+    background-color: var(--fir);
+    /* Warm glow at the top over faint straw stars */
+    background-image:
+        radial-gradient(ellipse 70% 40% at 50% 0%, rgb(255 214 140 / 0.12), transparent 70%),
+        url("img/sterne.svg");
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+a {
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 3px solid var(--straw);
+    outline-offset: 3px;
+}
+
+/* ---------- Page heads ---------- */
+
+.page-head {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 2rem 1rem 1.75rem;
+    text-align: center;
+}
+
+.page-head p {
+    margin: 0.25rem 0 0;
+}
+
+.title {
+    margin: 0;
+    font-family: var(--handwriting);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 10vw, 4.25rem);
+    line-height: 1.6;
+}
+
+/* "Alle Wunschlisten" link above a list */
+.back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding-right: 0.5rem;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.back::before {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-left: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+
+.list-head {
+    padding: 0.5rem 0.75rem 1.25rem;
+    text-align: left;
+}
+
+/* On list pages the tag is a bit smaller, so the list starts higher up */
+.list-head + .tags {
+    padding-bottom: 2rem;
+}
+
+.list-head + .tags .tag {
+    min-height: clamp(7.5rem, 30vw, 11rem);
+}
+
+/* Hint under the gift tags on the start page */
+.note {
+    max-width: 30rem;
+    margin: 0 auto;
+    padding: 0.5rem 1.25rem 3rem;
+    text-align: center;
+    font-size: 1.0625rem;
+}
+
+/* ---------- Gift tags on the twine ---------- */
+
+.tags {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.75rem, 4vw, 2.75rem);
+    padding: 0 1rem 2.5rem;
+}
+
+/* The twine runs across the whole page */
+.tags::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(-60deg, var(--cranberry) 0 4px, var(--snow) 4px 8px);
+    box-shadow: 0 2px 3px rgb(0 0 0 / 0.3);
+}
+
+/* Fir branches at both ends of the twine */
+.tags::after {
+    --branch: clamp(3.25rem, 12vw, 7.5rem);
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: calc(var(--branch) * -0.31);   /* Twine crosses the branch near its base */
+    left: 0;
+    right: 0;
+    height: var(--branch);
+    background:
+        url("img/zweig-links.svg") left top / auto 100% no-repeat,
+        url("img/zweig-rechts.svg") right top / auto 100% no-repeat;
+    pointer-events: none;
+}
+
+.tag {
+    --hole: 1.5rem;            /* From the tag's top edge to the middle of the hole */
+    --drop: 2rem;              /* String between twine and tag */
+    --tilt: -3deg;
+    position: relative;
+    z-index: 0;
+    flex: 0 1 10rem;
+    min-width: 0;
+    min-height: clamp(8.5rem, 38vw, 12.5rem);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: var(--drop) 0 0;
+    padding: calc(var(--hole) + 0.75rem) 0.5rem 1rem;
+    color: var(--ink);
+    font-family: var(--handwriting);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 6.5vw, 2.25rem);
+    line-height: 1.55;
+    text-align: center;
+    text-decoration: none;
+    /* Hangs from its knot on the twine */
+    transform: rotate(var(--tilt));
+    transform-origin: 50% calc(-1 * var(--drop));
+    filter: drop-shadow(0 6px 6px rgb(0 0 0 / 0.28));
+    transition: transform 0.6s ease;
+}
+
+.tag:nth-child(2) {
+    --drop: 3rem;
+    --tilt: 2deg;
+}
+
+.tag:nth-child(3) {
+    --drop: 1.5rem;
+    --tilt: -1.5deg;
+}
+
+/* Kraft paper with cut top corners and a punched, reinforced hole */
+.tag::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 50% var(--hole), transparent 0.6rem, var(--kraft-ring) 0.6rem 0.8rem, transparent 0.8rem),
+        var(--kraft);
+    clip-path: polygon(1.75rem 0, calc(100% - 1.75rem) 0, 100% 1.75rem, 100% 100%, 0 100%, 0 1.75rem);
+    -webkit-mask: radial-gradient(circle at 50% var(--hole), transparent 0.6rem, #000 calc(0.6rem + 0.5px));
+    mask: radial-gradient(circle at 50% var(--hole), transparent 0.6rem, #000 calc(0.6rem + 0.5px));
+}
+
+/* String from the twine down through the hole */
+.tag::after {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    left: calc(50% - 1px);
+    top: calc(-1 * var(--drop));
+    width: 2px;
+    height: calc(var(--drop) + var(--hole));
+    background: repeating-linear-gradient(var(--cranberry) 0 3px, var(--snow) 3px 6px);
+}
+
+a.tag:hover,
+a.tag:focus-visible {
+    transform: rotate(calc(var(--tilt) * -0.6));
+}
+
+a.tag:focus-visible {
+    outline-offset: 6px;
+}
+
+.tag-for {
+    font-size: 0.6em;
+}
+
+/* ---------- List sheet ---------- */
+
+.sheet {
+    width: min(44rem, 100% - 1.5rem);
+    box-sizing: border-box;
+    margin: 0 auto 3rem;
+    padding: 1.25rem clamp(1rem, 4vw, 2rem) 1.5rem;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 18px 40px rgb(0 0 0 / 0.3);
+}
+
+.sheet > p:first-child {
+    margin-top: 0;
+}
+
+.sheet :focus-visible {
+    outline-color: var(--cranberry);
+}
+
+#item-list {
+    border-top: 1px solid var(--rule);
+}
+
+/* "Loading" and error notes shown in place of the list */
+.message {
+    margin: 0;
+    padding: 1rem 0;
+    color: var(--ink-soft);
+}
+
+/* One gift: checkbox, name, shop buttons */
+.item-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+.item-container input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: 0;
+    border: 2px solid #a59886;
+    border-radius: 0.375rem;
+    background: #fff center / 75% no-repeat;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.item-container input[type="checkbox"]:checked {
+    border-color: var(--fir);
+    background-color: var(--fir);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Taken and locked: stays ticked until the switch below unlocks it */
+.item-container input[type="checkbox"]:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
+/* Gift name plus its shop buttons; the buttons move under the name when space runs out */
+.item-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.375rem 1rem;
+}
+
+.item-text label {
+    flex: 1 1 14rem;
+    cursor: pointer;
+}
+
+/* A taken gift: name greyed out with a small note */
+.item-container:has(input:checked) label {
+    color: var(--ink-soft);
+}
+
+.item-container:has(input:checked) label::after {
+    content: "vergeben";
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0 0.5rem;
+    border-radius: 0.25rem;
+    background: #f1e6d4;
+    color: #7a5a2e;
+    font-size: 0.8em;
+}
+
+.order-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* "Hier bestellen" / "Vorschlag n" links, styled as buttons */
+.order-button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0 0.875rem;
+    border-radius: 999px;
+    background: #e3ebe4;
+    color: #1d4030;
+    font-size: 1rem;
+    text-decoration: none;
+    white-space: nowrap;         /* A button never breaks in the middle */
+    transition: background-color 0.2s ease;
+}
+
+.order-button:hover {
+    background: #cfdfd3;
+}
+
+/* ---------- Several suggestions for one wish: one line that opens on tap ---------- */
+
+.item-group {
+    border-bottom: 1px solid var(--rule);
+}
+
+.item-group summary {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.75rem;
+    padding: 0.75rem 0 0.75rem 2.625rem;   /* Name lines up with the gift names */
+    cursor: pointer;
+    list-style: none;                      /* Own arrow below instead of the small default one */
+}
+
+.item-group summary::-webkit-details-marker {
+    display: none;                         /* For Safari */
+}
+
+/* Arrow in the checkbox column; points down while the group is open */
+.item-group summary::before {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    top: 1.2rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 3px solid var(--fir);
+    border-bottom: 3px solid var(--fir);
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+}
+
+.item-group[open] summary::before {
+    transform: rotate(45deg);
+}
+
+.group-name {
+    font-weight: 600;
+}
+
+.group-count {
+    color: var(--ink-soft);
+    font-size: 0.85em;
+}
+
+/* Suggestions inside an opened group sit indented under it */
+.item-group .item-container {
+    margin-left: 2.625rem;
+}
+
+.item-group .item-container:last-child {
+    border-bottom: 0;
+}
+
+/* ---------- Unlock switch under the list ---------- */
+
+.unlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    padding: 1rem 1.125rem;
+    border-radius: 6px;
+    background: #f6efe3;
+    color: var(--ink-soft);
+    font-size: 1rem;
+}
+
+.unlock label:first-child {
+    cursor: pointer;
+}
+
 .switch {
     position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+    flex: none;
+    width: 3.5rem;
+    height: 2rem;
 }
 
-/* Hide the default HTML checkbox */
+/* Hide the default checkbox; the slider shows its state */
 .switch input {
+    position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slider */
 .slider {
     position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background-color: #cdc2b1;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
+    transition: background-color 0.3s ease;
 }
 
-.slider:before {
+.slider::before {
+    content: "";
     position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
+    top: 0.25rem;
+    left: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+    transition: transform 0.3s ease;
 }
 
-/* When checked, change background color */
-input:checked + .slider {
-    background-color: #4CAF50;
+.switch input:checked + .slider {
+    background-color: var(--cranberry);
 }
 
-/* Move the slider (circle) when checked */
-input:checked + .slider:before {
-    transform: translateX(26px);
+.switch input:checked + .slider::before {
+    transform: translateX(1.5rem);
 }
 
-/* Optional - making the switch more rounded */
-.slider.round {
-    border-radius: 34px;
+.switch input:focus-visible + .slider {
+    outline: 3px solid var(--cranberry);
+    outline-offset: 3px;
 }
 
-.slider.round:before {
-    border-radius: 50%;
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 30rem) {
+    .unlock {
+        padding: 0.875rem 1rem;
+    }
 }
 
-/* Increase the text size for all paragraphs */
-p {
-    font-size: 20px;
+/* Windows high-contrast mode drops the drawn tick, so use the system checkbox */
+@media (forced-colors: active) {
+    .item-container input[type="checkbox"] {
+        -webkit-appearance: auto;
+        appearance: auto;
+    }
 }
 
-/* Increase text size for unordered list items */
-ul li {
-    font-size: 20px;
-}
-
-/* "Loading" and error notes shown in place of the list */
-.message {
-    color: #666;
-    font-style: italic;
-}
-
-.item-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;    /* Center align items */
-    padding: 10px 0;        /* Add some vertical spacing between items */
-    gap: 10px;              /* Space between each element */
-    margin-left: 10px;      /* Add some left margin */
-}
-
-/* Increase checkbox size */
-.item-container input[type="checkbox"] {
-    transform: scale(2.5);
-    -webkit-transform: scale(2.5); /* For Safari */
-}
-
-/* Several suggestions for one wish: one line that opens on tap */
-.item-group {
-    margin-left: 10px;
-    padding: 10px 0;
-}
-
-.item-group summary {
-    font-size: 20px;
-    cursor: pointer;
-    list-style: none;          /* Own triangle below instead of the small default one */
-}
-
-.item-group summary::-webkit-details-marker {
-    display: none;             /* For Safari */
-}
-
-/* Green triangle in the checkbox column; points down while the group is open */
-.item-group summary::before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    border-style: solid;
-    border-width: 8px 0 8px 13px;
-    border-color: transparent transparent transparent #4CAF50;
-    margin: 0 18px 0 4px;
-    transition: transform 0.2s ease;
-}
-
-.item-group[open] summary::before {
-    transform: rotate(90deg);
-}
-
-/* Suggestions inside an opened group sit indented under it */
-.item-group .item-container {
-    margin-left: 30px;
-}
-
-/* Gift name plus its shop buttons; wraps onto more lines when needed */
-.item-text {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
-    margin-left: 5px;
-}
-
-.item-container label {
-    font-size: 20px;
-}
-
-/* "Hier bestellen" / "Vorschlag n" links, styled as buttons */
-.item-container .order-button {
-    display: inline-block;
-    white-space: nowrap;       /* A button never breaks in the middle */
-    padding: 1px 6px;
-    background-color: #4CAF50; /* Green background */
-    color: white;
-    font-size: 16px;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover transition */
-}
-
-.item-container .order-button:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
-}
-
-.item-container .order-button:active {
-    background-color: #3e8e41;
-    transform: translateY(1px);
-}
-
-.item-container .order-button:focus {
-    outline: 2px solid #8ef1b7;
+@media (prefers-reduced-motion: reduce) {
+    .tag,
+    .slider,
+    .slider::before,
+    .item-group summary::before,
+    .item-container input[type="checkbox"] {
+        transition: none;
+    }
 }

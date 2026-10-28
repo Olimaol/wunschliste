@@ -4,52 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Wunschliste</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 10px 0;
-        }
-        a {
-            text-decoration: none;
-            color: #007BFF;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="theme-color" content="#234536">
+    <title>Wunschlisten</title>
+    <link rel="icon" href="img/stern.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="wunschliste.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Wunschlisten</h1>
-        <p>Konkrete Vorschläge findet ihr hier:</p>
-        <ul>
-            <li><a href="fabi.html">> Fabi Geburtstag und Weihnachten</a></li>
-            <li><a href="emil.html">> Emil Geburtstag und Weihnachten</a></li>
-            <li><a href="beide.html">> Für beide zusammen</a></li>
-        </ul>
-        <p>Was auch geht, ist Geld / Gutscheine für Gartenspielzeuge, Kleidung, etc. im kommenden Jahr.</p>
-    </div>
+    <header class="page-head">
+        <h1 class="title">Wunschlisten</h1>
+        <p>Konkrete Vorschläge für Geburtstag und Weihnachten findet ihr hier:</p>
+    </header>
+
+    <!-- One gift tag per list, hanging from the twine -->
+    <nav class="tags" aria-label="Wunschlisten">
+        <a class="tag" href="fabi.html"><span class="tag-for">Für</span> Fabi</a>
+        <a class="tag" href="emil.html"><span class="tag-for">Für</span> Emil</a>
+        <a class="tag" href="beide.html"><span class="tag-for">Für</span> beide <span class="tag-for">zusammen</span></a>
+    </nav>
+
+    <p class="note">Was auch geht, ist Geld / Gutscheine für Gartenspielzeuge, Kleidung, etc. im kommenden Jahr.</p>
 </body>
 </html>

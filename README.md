@@ -11,10 +11,12 @@ erscheinen sofort bei allen, die die Seite gerade offen haben.
 
 | Datei | Inhalt |
 |---|---|
-| `index.html` | Übersicht mit Links zu den Listen |
-| `emil.html`, `fabi.html`, `beide.html` | je eine Liste: Überschrift, Hinweistexte und der Name der Liste in der Datenbank (`data-list="..."`) |
+| `index.html` | Übersicht: ein Geschenkanhänger pro Liste |
+| `emil.html`, `fabi.html`, `beide.html` | je eine Liste: Anhänger mit Namen, Hinweistexte und der Name der Liste in der Datenbank (`data-list="..."`) |
 | `wunschliste.js` | gemeinsamer Code: lädt die Liste live und speichert Häkchen |
-| `wunschliste.css` | gemeinsames Aussehen |
+| `wunschliste.css` | gemeinsames Aussehen (weihnachtlich: Anhänger an Bäckergarn auf grünem Geschenkpapier) |
+| `fonts/` | Schriften Playwrite DE LA (Handschrift) und Fraunces, mit Lizenz (SIL Open Font License); liegen auf der Seite selbst statt bei Google |
+| `img/` | Strohsterne im Hintergrund, Tannenzweige, Symbol im Browser-Tab |
 | `database.rules.json` | Zugriffsregeln der Datenbank |
 | `firebase.json`, `.firebaserc` | Einstellungen für das Firebase-Kommandozeilenwerkzeug |
 | `tests/rules.test.mjs` | prüft die Zugriffsregeln an einer lokalen Test-Datenbank |
@@ -77,5 +79,5 @@ python3 -m http.server 8000
 
 1. Eine Listenseite kopieren (z. B. `emil.html`), Titel, Überschrift und
    `data-list="neu_geschenke"` anpassen. Der Name muss auf `_geschenke` enden.
-2. Link in `index.html` ergänzen.
+2. In `index.html` einen Anhänger ergänzen (eine Zeile `<a class="tag" ...>` kopieren).
 3. In der Datenbank den Knoten `neu_geschenke` mit Geschenken anlegen.
