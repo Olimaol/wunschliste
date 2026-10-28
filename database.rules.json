@@ -1,0 +1,16 @@
+{
+  "rules": {
+    // Everyone may read the gift lists (nodes named "<something>_geschenke").
+    // Everything else in the database stays closed.
+    "$list": {
+      ".read": "$list.matches(/^[a-z0-9]+_geschenke$/)",
+      "$item": {
+        // Visitors may only tick or untick an existing gift. Names, links and
+        // the lists themselves can only be changed in the Firebase console.
+        "checked": {
+          ".write": "$list.matches(/^[a-z0-9]+_geschenke$/) && data.parent().child('name').isString() && newData.isBoolean()"
+        }
+      }
+    }
+  }
+}
