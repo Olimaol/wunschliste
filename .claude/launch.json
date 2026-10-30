@@ -1,0 +1,31 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wunschliste",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8000",
+        "--bind",
+        "127.0.0.1"
+      ],
+      "port": 8000,
+      "url": "http://127.0.0.1:8000"
+    },
+    {
+      "name": "datenbank-emulator",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "firebase-tools@15.34.0",
+        "emulators:start",
+        "--only",
+        "database"
+      ],
+      "port": 9000,
+      "url": "http://127.0.0.1:9000"
+    }
+  ]
+}
