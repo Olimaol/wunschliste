@@ -18,6 +18,8 @@ if (["localhost", "127.0.0.1"].includes(location.hostname)) {
 const itemList = document.getElementById("item-list");
 const unlockSwitch = document.getElementById("unlock-switch");
 const listName = itemList.dataset.list;
+// Heading of the box with the most important wishes, e.g. "Ganz oben auf Emils Wunschzettel"
+const importantHeading = itemList.dataset.importantHeading ?? "Ganz oben auf dem Wunschzettel";
 
 let items = null;  // Latest state of the list, kept for re-rendering
 
@@ -116,6 +118,14 @@ function renderGroup(name, members, locked) {
     return group;
 }
 
+// Heading inside the list: above the important wishes, or above the rest
+function listHeading(text) {
+    const heading = document.createElement("h2");
+    heading.className = "list-heading";
+    heading.textContent = text;
+    return heading;
+}
+
 function renderItems() {
     const locked = !unlockSwitch.checked;  // Checked items stay locked unless unlocked
     const entries = Object.entries(items ?? {})
@@ -133,17 +143,31 @@ function renderItems() {
     for (const [key, item] of entries) {
         const groupName = typeof item.group === "string" ? item.group : "";
         if (!groupName) {
-            lines.push({ name: item.name, render: () => renderItem(key, item, locked) });
+            lines.push({ name: item.name, members: [[key, item]], render: () => renderItem(key, item, locked) });
         } else if (groups.has(groupName)) {
             groups.get(groupName).push([key, item]);
         } else {
             const members = [[key, item]];
             groups.set(groupName, members);
-            lines.push({ name: groupName, render: () => renderGroup(groupName, members, locked) });
+            lines.push({ name: groupName, members, render: () => renderGroup(groupName, members, locked) });
         }
     }
     lines.sort((a, b) => a.name.localeCompare(b.name, "de"));
-    itemList.replaceChildren(...lines.map((line) => line.render()));
+
+    // Important wishes go into a box at the top, the rest under "Weitere Ideen".
+    // A group counts as important once one of its suggestions is. A list with
+    // only one kind of wish looks as before.
+    const isImportant = (line) => line.members.some(([, item]) => item.important === true);
+    const important = lines.filter(isImportant);
+    const others = lines.filter((line) => !isImportant(line));
+    if (important.length === 0 || others.length === 0) {
+        itemList.replaceChildren(...lines.map((line) => line.render()));
+        return;
+    }
+    const box = document.createElement("section");
+    box.className = "top-wishes";
+    box.append(listHeading(importantHeading), ...important.map((line) => line.render()));
+    itemList.replaceChildren(box, listHeading("Weitere Ideen"), ...others.map((line) => line.render()));
 }
 
 // Runs once on load and again whenever anyone changes the list (live update)

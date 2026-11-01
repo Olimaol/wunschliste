@@ -30,6 +30,7 @@ const seed = {
         a1: { name: "Laufrad", checked: false, link: "https://example.com/laufrad" },
         a2: { name: "Buch", checked: true },
         a3: { name: "Neu, noch ohne Haken" },
+        a4: { name: "Roller", checked: false, important: true },
     },
     privat: { notiz: "nicht öffentlich" },
 };
@@ -46,12 +47,16 @@ await expect("Haken setzen", "PUT", "emil_geschenke/a1/checked", true, ALLOW);
 await expect("Haken entfernen", "PUT", "emil_geschenke/a1/checked", false, ALLOW);
 await expect("ersten Haken bei Eintrag ohne 'checked' setzen", "PUT", "emil_geschenke/a3/checked", true, ALLOW);
 await expect("Haken per update() setzen (alter Seitencode)", "PATCH", "emil_geschenke/a1", { checked: true }, ALLOW);
+await expect("Haken bei wichtigem Geschenk setzen", "PUT", "emil_geschenke/a4/checked", true, ALLOW);
 
 await expect("Haken auf Text setzen", "PUT", "emil_geschenke/a1/checked", "ja", DENY);
 await expect("Haken löschen", "DELETE", "emil_geschenke/a1/checked", undefined, DENY);
 await expect("Namen ändern", "PUT", "emil_geschenke/a1/name", "Gehackt", DENY);
 await expect("Link ändern", "PUT", "emil_geschenke/a1/link", "javascript:alert(1)", DENY);
 await expect("Haken + Link in einem update()", "PATCH", "emil_geschenke/a1", { checked: true, link: "https://evil.example" }, DENY);
+await expect("als wichtig markieren", "PUT", "emil_geschenke/a1/important", true, DENY);
+await expect("Wichtig-Markierung entfernen", "DELETE", "emil_geschenke/a4/important", undefined, DENY);
+await expect("Haken + Wichtig-Markierung in einem update()", "PATCH", "emil_geschenke/a1", { checked: true, important: true }, DENY);
 await expect("Eintrag löschen", "DELETE", "emil_geschenke/a1", undefined, DENY);
 await expect("Eintrag hinzufügen", "PUT", "emil_geschenke/neu", { name: "Spam", checked: false }, DENY);
 await expect("Haken bei nicht vorhandenem Eintrag", "PUT", "emil_geschenke/neu/checked", true, DENY);
@@ -61,9 +66,10 @@ await expect("anderen Bereich schreiben", "PUT", "privat/notiz", "x", DENY);
 await expect("ganze Datenbank überschreiben", "PUT", "", {}, DENY);
 
 const { data } = await request("GET", "emil_geschenke", undefined, true);
-const intact = data.a1.name === "Laufrad" && data.a1.link === "https://example.com/laufrad" && !data.neu;
+const intact = data.a1.name === "Laufrad" && data.a1.link === "https://example.com/laufrad" && !data.neu
+    && data.a1.important === undefined && data.a4.important === true;
 if (!intact) failures++;
-console.log(`${intact ? "ok  " : "FAIL"}  Namen und Links sind unverändert`);
+console.log(`${intact ? "ok  " : "FAIL"}  Namen, Links und Wichtig-Markierungen sind unverändert`);
 
 console.log(failures ? `\n${failures} Test(s) fehlgeschlagen` : "\nAlle Tests bestanden");
 process.exit(failures ? 1 : 0);
