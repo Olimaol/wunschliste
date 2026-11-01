@@ -76,7 +76,7 @@ function renderItem(key, item, locked) {
             orderButton.href = link;
             orderButton.target = "_blank";
             orderButton.rel = "noopener noreferrer";  // The shop page gets no handle on this tab
-            orderButton.textContent = links.length === 1 ? "Hier bestellen" : `Vorschlag ${index + 1}`;
+            orderButton.textContent = links.length === 1 ? "Ansehen" : `Vorschlag ${index + 1}`;
             orderLinks.append(orderButton);
         });
         text.append(orderLinks);

@@ -350,7 +350,7 @@ a.tag:focus-visible {
     gap: 0.5rem;
 }
 
-/* "Hier bestellen" / "Vorschlag n" links, styled as buttons */
+/* "Ansehen" / "Vorschlag n" links, styled as buttons */
 .order-button {
     display: inline-flex;
     align-items: center;

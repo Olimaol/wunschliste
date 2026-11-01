@@ -30,7 +30,7 @@ Jede Liste ist ein Knoten `<name>_geschenke` mit einem Eintrag pro Geschenk:
 emil_geschenke
   <beliebiger Schlüssel>
     name:    "Laufrad"        Text, Pflicht
-    links:   ["https://...", ...]   optional; ein Link ergibt „Hier bestellen“,
+    links:   ["https://...", ...]   optional; ein Link ergibt „Ansehen“,
                                     mehrere ergeben „Vorschlag 1“, „Vorschlag 2“, …
     checked: false                  true = jemand schenkt es
 ```
