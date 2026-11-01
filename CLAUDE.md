@@ -81,6 +81,9 @@ in `README.md`. Hier steht, wie in diesem Repo gearbeitet wird.
   auf `_geschenke` enden.
 - Links nur mit `http(s)` als Knopf und mit `rel="noopener noreferrer"`; Texte
   aus der Datenbank nur über `textContent` einsetzen.
+- Wer was schenkt, merkt sich nur der Browser der Verwandten (`localStorage`).
+  Keine Namen, Adressen oder Kennungen von Verwandten in die Datenbank: Sie ist
+  für alle lesbar.
 - Das Repo ist öffentlich: keine Zugangsdaten, keine E-Mail-Adressen, keine
   Datenbank-Sicherungen einchecken.
 
