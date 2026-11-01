@@ -5,15 +5,17 @@ https://olimaol.github.io/wunschliste/
 
 Verwandte öffnen eine Liste und haken ab, was sie schenken wollen. Die Häkchen
 liegen in einer Firebase Realtime Database (kostenloser Spark-Tarif) und
-erscheinen sofort bei allen, die die Seite gerade offen haben.
+erscheinen sofort bei allen, die die Seite gerade offen haben. Was jemand
+selbst gewählt hat, merkt sich nur sein eigener Browser (siehe „Eigene Auswahl
+und Merkzettel“).
 
 ## Dateien
 
 | Datei | Inhalt |
 |---|---|
-| `index.html` | Übersicht: ein Geschenkanhänger pro Liste |
+| `index.html` | Übersicht: ein Geschenkanhänger pro Liste; darunter „Das schenkst du“, sobald man etwas gewählt hat |
 | `emil.html`, `fabi.html`, `beide.html` | je eine Liste: Anhänger mit Namen, Hinweistexte, der Name der Liste in der Datenbank (`data-list="..."`) und die Überschrift für die wichtigsten Wünsche (`data-important-heading="..."`) |
-| `wunschliste.js` | gemeinsamer Code: lädt die Liste live und speichert Häkchen |
+| `wunschliste.js` | gemeinsamer Code: lädt die Liste live, fragt vor dem Abhaken nach, merkt sich die eigene Auswahl und baut den Merkzettel; oben in `LISTS` stehen alle Listen mit „für wen“ |
 | `wunschliste.css` | gemeinsames Aussehen (weihnachtlich: Anhänger an Bäckergarn auf grünem Geschenkpapier) |
 | `fonts/` | Schriften Playwrite DE LA (Handschrift) und Fraunces, mit Lizenz (SIL Open Font License); liegen auf der Seite selbst statt bei Google |
 | `img/` | Strohsterne im Hintergrund und vor den wichtigsten Wünschen, Tannenzweige, Symbol im Browser-Tab, Vorschaubilder für geteilte Links (`vorschau*.jpg`) |
@@ -56,6 +58,29 @@ Geschenke anlegen, umbenennen oder löschen geht nur in der Firebase-Konsole
 (Realtime Database → Daten) oder mit dem Firebase-Kommandozeilenwerkzeug,
 nicht über die Webseite.
 
+## Eigene Auswahl und Merkzettel
+
+- Antippen eines freien Geschenks fragt „Möchtest du das schenken?“. Erst
+  „Ja, das schenke ich“ setzt `checked`, und zwar als Transaktion: nur solange
+  es noch frei ist. Tippen zwei Leute gleichzeitig, bekommt der Zweite „Schade –
+  das hat gerade jemand anderes ausgewählt“.
+- Was jemand gewählt hat, steht nur in seinem Browser (`localStorage`, Schlüssel
+  `wunschliste-von-mir`; `wunschliste-erklaert` merkt sich, dass der Hinweis
+  beim ersten Mal schon kam). Die Datenbank erfährt nie, wer was schenkt.
+- Eigene Geschenke haben einen roten Haken und „von dir“; nochmal antippen fragt
+  „Doch nicht schenken?“. Häkchen anderer bleiben gesperrt, bis man den Schalter
+  unter der Liste umlegt; auch dann fragt die Seite vor dem Entfernen.
+- Der Kasten „Das schenkst du“ steht oben auf jeder Liste und auf der
+  Startseite. Sein Knopf „Merkzettel an mich schicken“ öffnet WhatsApp
+  (`https://wa.me/?text=…`) mit der Liste und einem Link wie
+  `https://olimaol.github.io/wunschliste/#meine=emil:roller,rucksack;fabi:puppe`.
+  Dieser Link bringt die Auswahl auf jedes Gerät zurück.
+- Ist ein eigenes Geschenk nicht mehr abgehakt (jemand hat das Häkchen entfernt,
+  oder es steht nicht mehr auf der Liste), sagt der Kasten das einmal und vergisst
+  es dann.
+- Safari auf dem iPhone löscht diese Browserdaten, wenn man die Seite etwa eine
+  Woche lang nicht öffnet. Dann hilft der Link im Merkzettel.
+
 ## Sicherheit
 
 - Der Firebase-Konfigurationsblock (`apiKey` usw.) ist laut Firebase kein
@@ -63,6 +88,7 @@ nicht über die Webseite.
 - Geschützt wird die Datenbank durch `database.rules.json`: Jeder darf die
   Listen lesen und bei bestehenden Geschenken nur `checked` auf `true`/`false`
   setzen. Alles andere ist gesperrt. Die Regeln laufen nicht ab.
+- Wer was schenkt, steht nur im Browser der Verwandten, nie in der Datenbank.
 
 ## Regeln testen und veröffentlichen
 
@@ -91,8 +117,10 @@ python3 -m http.server 8000
    `data-list="neu_geschenke"` und `data-important-heading` anpassen. Der Name
    muss auf `_geschenke` enden.
 2. In `index.html` einen Anhänger ergänzen (eine Zeile `<a class="tag" ...>` kopieren).
-3. In der Datenbank den Knoten `neu_geschenke` mit Geschenken anlegen.
-4. Vorschaubild für geteilte Links: `tools/vorschaubild.html?name=Neu` als
+3. In `wunschliste.js` bei `LISTS` eine Zeile ergänzen, z. B.
+   `neu_geschenke: "für Neu",` (für den Kasten „Das schenkst du“ und den Merkzettel).
+4. In der Datenbank den Knoten `neu_geschenke` mit Geschenken anlegen.
+5. Vorschaubild für geteilte Links: `tools/vorschaubild.html?name=Neu` als
    `img/vorschau-neu.jpg` speichern und in der neuen Seite die Zeilen
    `og:title`, `og:url`, `og:image` und `og:image:alt` anpassen.
 

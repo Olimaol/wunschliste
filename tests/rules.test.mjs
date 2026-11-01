@@ -31,6 +31,7 @@ const seed = {
         a2: { name: "Buch", checked: true },
         a3: { name: "Neu, noch ohne Haken" },
         a4: { name: "Roller", checked: false, important: true },
+        a5: { name: "Springseil", checked: false },
     },
     privat: { notiz: "nicht öffentlich" },
 };
@@ -65,9 +66,32 @@ await expect("ganze Liste löschen", "DELETE", "emil_geschenke", undefined, DENY
 await expect("anderen Bereich schreiben", "PUT", "privat/notiz", "x", DENY);
 await expect("ganze Datenbank überschreiben", "PUT", "", {}, DENY);
 
+// The page ticks a gift only while it is still free (a transaction): the
+// database writes only if the value is unchanged. Over REST that is an ETag check.
+async function etag(path) {
+    const response = await fetch(`${BASE}/${path}.json?ns=${NS}`, { headers: { "X-Firebase-ETag": "true" } });
+    return response.headers.get("ETag");
+}
+
+async function expectIfMatch(description, path, body, tag, expectedStatus) {
+    const response = await fetch(`${BASE}/${path}.json?ns=${NS}`, {
+        method: "PUT",
+        headers: { "if-match": tag },
+        body: JSON.stringify(body),
+    });
+    const ok = response.status === expectedStatus;
+    if (!ok) failures++;
+    console.log(`${ok ? "ok  " : "FAIL"}  ${description} (HTTP ${response.status})`);
+}
+
+const freeTag = await etag("emil_geschenke/a5/checked");
+await expectIfMatch("Haken nur setzen, solange frei (wie die Seite)", "emil_geschenke/a5/checked", true, freeTag, 200);
+await expectIfMatch("zweiter Haken mit veraltetem Stand wird abgewiesen", "emil_geschenke/a5/checked", true, freeTag, 412);
+await expectIfMatch("Namen mit passendem Stand ändern", "emil_geschenke/a5/name", "Gehackt", await etag("emil_geschenke/a5/name"), 401);
+
 const { data } = await request("GET", "emil_geschenke", undefined, true);
 const intact = data.a1.name === "Laufrad" && data.a1.link === "https://example.com/laufrad" && !data.neu
-    && data.a1.important === undefined && data.a4.important === true;
+    && data.a1.important === undefined && data.a4.important === true && data.a5.name === "Springseil";
 if (!intact) failures++;
 console.log(`${intact ? "ok  " : "FAIL"}  Namen, Links und Wichtig-Markierungen sind unverändert`);
 
