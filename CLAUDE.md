@@ -62,6 +62,11 @@ in `README.md`. Hier steht, wie in diesem Repo gearbeitet wird.
   `backups/` ist in `.gitignore` und darf nie ins öffentliche Repo.
 - Vorher nachsehen, ob schon jemand abgehakt hat; beim Umbauen keine Häkchen
   verlieren.
+- Geschenke nur zwischen Listen verschieben oder mit neuem Schlüssel anlegen,
+  wenn keins davon abgehakt ist: Jedes Handy erkennt eigene Geschenke an Liste
+  und Schlüssel (`<liste>_geschenke/<schlüssel>`, auch im Merkzettel-Link). Ist
+  etwas abgehakt, nichts verschieben und erst Oliver fragen. Nur den `name` zu
+  ändern ist unproblematisch.
 - Änderungen als ein einziges `database:update` mit Pfad-Schlüsseln (`null`
   löscht), vorher am Emulator mit denselben Ausgangsdaten durchspielen.
 - Live nie echte Häkchen setzen oder entfernen, auch nicht zum Testen; die
